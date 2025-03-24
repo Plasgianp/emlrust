@@ -38,7 +38,7 @@ If you prefer to install manually:
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 
 # Clone and build the project
-git clone https://github.com/yourusername/emlrust.git
+git clone https://github.com/Plasgianp/emlrust.git
 cd emlrust
 cargo build --release
 
