@@ -1,6 +1,6 @@
 mod emlrustlib;
 
-use clap::{Parser, ArgAction};
+use clap::{Parser, ArgAction, Command};
 use dotenv::dotenv;
 use emlrustlib::*;
 use std::env;
@@ -54,6 +54,119 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let api_key = env::var("api_key").unwrap_or_default();
 
     let args = Args::parse();
+    
+    // Check if any action flag is set
+    let has_action = args.emls_to_htmls || args.modify_href || args.script_removal || 
+                    args.modify_email || args.eml_file.is_some() || args.html_file.is_some() ||
+                    args.go_cmd.is_some() || args.goes || args.curl || 
+                    args.get_campaign_summary || args.get_campaigns_summaries;
+    
+    // If no flags are set, print help
+    if !has_action {
+        let mut cmd = Command::new("emlrust")
+            .about("Process email (.eml) files for phishing simulations")
+            .version(env!("CARGO_PKG_VERSION"));
+        
+        // Add all your arguments here (similar to how they're defined in Args)
+        cmd = cmd.arg(
+            clap::Arg::new("emls_to_htmls")
+                .short('r')
+                .long("emls_to_htmls")
+                .help("Convert .eml files to HTML")
+                .action(ArgAction::SetTrue),
+        );
+        
+        cmd = cmd.arg(
+            clap::Arg::new("modify_href")
+                .short('u')
+                .long("modify_href")
+                .help("Add {{.URL}} href in HTML files")
+                .action(ArgAction::SetTrue),
+        );
+        
+        cmd = cmd.arg(
+            clap::Arg::new("script_removal")
+                .short('s')
+                .long("script_removal")
+                .help("Remove all script content in HTML files")
+                .action(ArgAction::SetTrue),
+        );
+        
+        cmd = cmd.arg(
+            clap::Arg::new("modify_email")
+                .long("modify_email")
+                .help("Modify email addresses in HTML files")
+                .action(ArgAction::SetTrue),
+        );
+        
+        cmd = cmd.arg(
+            clap::Arg::new("directory")
+                .short('d')
+                .long("directory")
+                .help("Directory containing .eml or HTML files")
+                .value_name("DIR"),
+        );
+        
+        cmd = cmd.arg(
+            clap::Arg::new("eml_file")
+                .short('e')
+                .long("eml_file")
+                .help("Convert a single .eml file to HTML")
+                .value_name("FILE"),
+        );
+        
+        cmd = cmd.arg(
+            clap::Arg::new("html_file")
+                .short('f')
+                .long("html_file")
+                .help("Add {{.URL}} href in a single HTML file")
+                .value_name("FILE"),
+        );
+        
+        cmd = cmd.arg(
+            clap::Arg::new("go")
+                .short('a')
+                .long("go")
+                .help("Combine --eml_file, --html_file, and --modify_email")
+                .value_name("FILE"),
+        );
+        
+        cmd = cmd.arg(
+            clap::Arg::new("all")
+                .long("all")
+                .alias("gall")
+                .help("Does --go recursively")
+                .action(ArgAction::SetTrue),
+        );
+        
+        cmd = cmd.arg(
+            clap::Arg::new("curl")
+                .short('c')
+                .long("curl")
+                .help("General Curl Request to your Gophish")
+                .action(ArgAction::SetTrue),
+        );
+        
+        cmd = cmd.arg(
+            clap::Arg::new("get_campaign_summary")
+                .short('g')
+                .long("get_campaign_summary")
+                .help("Get Summary of a campaign")
+                .action(ArgAction::SetTrue),
+        );
+        
+        cmd = cmd.arg(
+            clap::Arg::new("get_campaigns_summaries")
+                .short('h')
+                .long("get_campaigns_summaries")
+                .help("Get Summary of all campaigns")
+                .action(ArgAction::SetTrue),
+        );
+        
+        cmd.print_help()?;
+        println!();
+        return Ok(());
+    }
 
     if args.emls_to_htmls {
         if let Some(directory_path) = &args.directory {
