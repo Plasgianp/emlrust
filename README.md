@@ -1,6 +1,6 @@
-# EmlRust
+# Emlrust
 
-EmlRust is a command-line tool written in Rust for processing email (.eml) files, specifically designed for preparing emails for use in phishing simulations. It can convert .eml files to HTML, modify anchor tags to use template URLs, anonymize email addresses, and remove potentially dangerous JavaScript.
+Emlrust is a command-line tool written in Rust for processing email (.eml) files, specifically designed for preparing emails for use in phishing simulations. It can convert .eml files to HTML, modify anchor tags to use template URLs, anonymize email addresses, and remove potentially dangerous JavaScript.
 
 ## Features
 
