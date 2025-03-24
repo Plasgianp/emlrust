@@ -18,7 +18,7 @@ EmlRust is a command-line tool written in Rust for processing email (.eml) files
 The easiest way to get started is using the provided setup script:
 
 ```bash
-git clone https://github.com/yourusername/emlrust.git
+git clone https://github.com/Plasgianp/emlrust.git
 cd emlrust
 chmod +x setup.sh
 ./setup.sh
@@ -113,7 +113,7 @@ This converts a single email to HTML, anonymizes email addresses, and adds templ
 To build the latest version from source:
 
 ```bash
-git clone https://github.com/yourusername/emlrust.git
+git clone https://github.com/Plasgianp/emlrust.git
 cd emlrust
 cargo build --release
 ```
@@ -122,7 +122,6 @@ The compiled binary will be in `./target/release/emlrust`.
 
 ## License
 
-[Your chosen license]
 
 ## Contributing
 
