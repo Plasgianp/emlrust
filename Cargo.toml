@@ -1,0 +1,30 @@
+[package]
+name = "emlrust"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+clap = { version = "4.3", features = ["derive"] }
+dotenv = "0.15.0"
+walkdir = "2.3"
+regex = "1.9"
+scraper = "0.17"
+html5ever = "0.26"
+mail-parser = "0.8"
+dirs = "5.0"
+
+[package.metadata.deb]
+maintainer = "Your Name <cookedmelon@protonmail.com>"
+copyright = "2025, CookedMelon <cookedmelon@protonmail.com"
+license-file = ["LICENSE", "3"]
+extended-description = """
+EmlRust is a utility to process .eml files for phishing simulations.
+It can convert .eml files to HTML, modify anchor tags, anonymize
+email addresses, and remove potentially dangerous JavaScript."""
+depends = "$auto"
+section = "utility"
+priority = "optional"
+assets = [
+    ["target/release/emlrust", "usr/bin/", "755"],
+    ["README.md", "usr/share/doc/emlrust/README", "644"],
+]
