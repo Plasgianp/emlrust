@@ -264,23 +264,18 @@ QUICK START EXAMPLES:
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    // Load environment variables
     dotenv().ok();
     let url = env::var("url").unwrap_or_default();
     let gophish_api_key = env::var("api_key").unwrap_or_default();
     
-    // Parse command-line arguments
     let args = Args::parse();
 
-    // Handle examples flag first
     if let Some(category) = &args.examples {
         show_examples(category);
         return Ok(());
     }
 
-    // Handle IP analysis flag
     if let Some(csv_file_path) = &args.csvents {
-        // Get AbuseIPDB API key from command line arg or environment variable
         let abuseipdb_api_key = args.api_key
             .or_else(|| env::var("ABUSEIPDB_API_KEY").ok())
             .or_else(|| env::var("API_KEY").ok());
@@ -304,7 +299,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         return Ok(());
     }
 
-    // Handle emlsToHTMLs flag
     if args.emls_to_htmls {
         if let Some(directory_path) = &args.directory {
             for entry in WalkDir::new(directory_path).into_iter().filter_map(|e| e.ok()) {
@@ -329,7 +323,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     }
 
-    // Handle modifyHref flag
     if args.modify_href {
         if let Some(directory_path) = &args.directory {
             let new_href = "{{.URL}}";
@@ -351,7 +344,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     }
 
-    // Handle emlFile flag
     if let Some(eml_file_path) = &args.eml_file {
         let path = Path::new(eml_file_path);
         if !path.exists() || path.is_dir() || !path.extension().map_or(false, |ext| ext.eq_ignore_ascii_case("eml")) {
@@ -372,7 +364,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     }
 
-    // Handle htmlFile flag
     if let Some(html_file_path) = &args.html_file {
         let path = Path::new(html_file_path);
         if !path.exists() || path.is_dir() || !path.extension().map_or(false, |ext| {
@@ -389,7 +380,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         }
     }
 
-    // Handle goCmd flag
     if let Some(go_cmd_path) = &args.go_cmd {
         let path = Path::new(go_cmd_path);
         if !path.exists() || path.is_dir() || !path.extension().map_or(false, |ext| ext.eq_ignore_ascii_case("eml")) {
@@ -400,7 +390,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
         match eml_to_html(path) {
             Ok(html_content) => {
-                // Apply email anonymization if the flag is set
                 let modified_html = if args.modify_email {
                     anonymizer(&html_content, None, None)
                 } else {
@@ -423,7 +412,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         return Ok(());
     }
 
-    // Handle goes flag
     if args.goes {
         if let Some(directory_path) = &args.directory {
             match gophishing_everything(directory_path) {
@@ -438,7 +426,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         return Ok(());
     }
 
-    // Handle scriptRemoval flag
     if args.script_removal {
         if let Some(directory_path) = &args.directory {
             match remove_scripts_from_directory(directory_path) {
@@ -469,9 +456,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         return Ok(());
     }
 
-    // Add implementation for curl related flags
     if args.curl || args.get_campaign_summary || args.get_campaigns_summaries {
-        // Simple stub implementation
         println!("API operations: Not implemented yet");
         println!("URL: {}, API Key: {}", url, gophish_api_key);
         
@@ -490,7 +475,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         println!("For API examples: emlrust --examples api");
     }
 
-    // If no flags are provided, show help
     if !args.emls_to_htmls && !args.modify_href && args.eml_file.is_none() && args.html_file.is_none() 
         && args.go_cmd.is_none() && !args.goes && !args.script_removal && !args.curl 
         && !args.get_campaign_summary && !args.get_campaigns_summaries && args.csvents.is_none() {
